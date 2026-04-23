@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Akash | Portfolio</title>
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+
+<!-- ================= VISITOR POPUP ================= -->
+<div id="visitorPopup" class="popup hidden">
+  <div class="popup-box">
+    <h2>Welcome</h2>
+    <p>Please introduce yourself</p>
+
+    <!-- NAME (only alphabets + spaces) -->
+<input 
+  id="vName" 
+  type="text" 
+  placeholder="Full Name*" 
+  required
+  pattern="[A-Za-z ]{2,50}"
+  title="Only letters allowed (2-50 characters)"
+  oninput="this.value = this.value.replace(/[^A-Za-z ]/g, '')"
+/>
+
+<!-- EMAIL (proper email validation) -->
+<input 
+  id="vEmail" 
+  type="email" 
+  placeholder="Email*" 
+  required
+/>
+
+<!-- OTP BUTTON -->
+<button onclick="sendOTP(event)">Get Verify Code</button>
+
+<!-- OTP (only 6 digit number) -->
+<input 
+  type="text" 
+  id="otp" 
+  placeholder="Enter OTP" 
+  required
+  pattern="[0-9]{6}"
+  maxlength="6"
+  inputmode="numeric"
+  title="Enter 6 digit OTP"
+  oninput="this.value = this.value.replace(/[^0-9]/g, '')"
+/>
+
+<!-- VERIFY BUTTON -->
+<button type="button" onclick="verifyOTP()">Verify</button>
+
+    <p id="status"></p>
+
+    <!-- PURPOSE -->
+    <select id="vPurpose" required>
+      <option value="">Purpose *</option>
+      <option>Recruiter</option>
+      <option>HR</option>
+      <option>Student</option>
+      <option>Employee</option>
+    </select>
+
+    <small>Used only for portfolio analytics</small>
+
+    <!-- 🔥 ENTER BUTTON (HIDDEN INITIALLY) -->
+    <button id="enterBtn" onclick="enterPortfolio()" style="display:none;">
+      Enter Portfolio →
+    </button>
+
+  </div>
+</div>
+
+<div class="main-layout">
+
+  <!-- LEFT SIDE -->
+  <div class="left-content">
+    <div id="terminal">
+      <pre id="terminal-output"></pre>
+
+      <div class="input-line">
+        <span>&gt;</span>
+        <input id="commandInput">
+      </div>
+    </div>
+  </div>
+
+  <!-- RIGHT SIDE -->
+  <div class="right-content">
+    <img src="/static/assets/profile.jpg" class="profile-img">
+
+    <div class="profile-text">
+      <h2>Akash Sharma</h2>
+      <p>Data Analyst</p>
+    </div>
+  </div>
+
+</div>
+
+<h1 class="big-text">OUTLIER</h1>
+
+<!-- ================= TERMINAL ================= -->
+<div id="terminal" class="hidden">
+  <pre id="terminal-output"></pre>
+
+  <div class="input-line">
+    <span>&gt;</span>
+    <input
+      id="commandInput"
+      placeholder="Type a command… (help | projects | contact)"
+      autocomplete="off"
+    >
+  </div>
+</div>
+
+<!-- MAIN JS -->
+<script src="{{ url_for('static', filename='script.js') }}"></script>
+
+</body>
+</html>
