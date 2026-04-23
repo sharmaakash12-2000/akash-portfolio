@@ -47,7 +47,7 @@ visitors = []
 
 @app.route("/")
 def home():
-    return render_template("index.html")
+    return render_template("index.html", show_profile=False)
 
 @app.route("/visit", methods=["POST"])
 def visit():
@@ -174,13 +174,15 @@ Data Analyst | Python | SQL | Power BI
     else:
         return jsonify({"status": "fail"})
 
+
 # ================== USER DASHBOARD ==================
 @app.route("/dashboard")
 def dashboard():
     if not session.get("user"):
-        return redirect("/login")
+        return redirect("/")
 
-    return f"Welcome {session.get('user')} "
+    return render_template("index.html", show_profile=True)
+
 
 # ================== ADMIN LOGIN ==================
 @app.route("/admin-login", methods=["GET", "POST"])
@@ -195,6 +197,7 @@ def admin_login():
             error = "Invalid password"
     return render_template("admin_login.html", error=error)
 
+
 # ================== ADMIN PANEL ==================
 @app.route("/admin")
 def admin():
@@ -204,11 +207,13 @@ def admin():
     stats = visitor_stats()
     return render_template("admin.html", visitors=visitors, stats=stats)
 
+
 # ================== ADMIN LOGOUT ==================
 @app.route("/admin-logout")
 def admin_logout():
     session.pop("admin", None)
     return redirect(url_for("admin_login"))
+
 
 # ================== RUN ==================
 if __name__ == "__main__":
