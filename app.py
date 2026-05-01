@@ -4,6 +4,7 @@ from datetime import datetime , timedelta
 import sqlite3, random, smtplib
 from werkzeug.security import generate_password_hash, check_password_hash
 import os
+import requests
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -26,24 +27,23 @@ conn.commit()
 
 # ================== EMAIL FUNCTION ==================
 def send_email(to_email, subject, body_text):
-    try:
-        import smtplib
+    api_key = os.getenv("RESEND_API_KEY")
 
-        sender = "srmaakku123@gmail.com"
-        password = os.getenv("EMAIL_PASS")
+    response = requests.post(
+        "https://api.resend.com/emails",
+        headers={
+            "Authorization": f"Bearer {api_key}",
+            "Content-Type": "application/json"
+        },
+        json={
+            "from": "onboarding@resend.dev",
+            "to": to_email,
+            "subject": subject,
+            "text": body_text
+        }
+    )
 
-        message = f"Subject: {subject}\n\n{body_text}"
-
-        server = smtplib.SMTP("smtp.gmail.com", 587)
-        server.starttls()
-        server.login(sender, password)
-        server.sendmail(sender, to_email, message.encode("utf-8"))
-        server.quit()
-
-        print("Mail sent successfully ✅")
-
-    except Exception as e:
-        print("Email error:", e)
+    print(response.text)
 
 # ================== VISITOR TRACKING ==================
 visitors = []
