@@ -3,6 +3,7 @@ from flask import Flask, render_template, request, redirect, url_for, session, j
 from datetime import datetime , timedelta
 import sqlite3, random, smtplib
 from werkzeug.security import generate_password_hash, check_password_hash
+import os
 
 app = Flask(__name__)
 app.secret_key = "supersecretkey"
@@ -26,15 +27,17 @@ conn.commit()
 # ================== EMAIL FUNCTION ==================
 def send_email(to_email, subject, body_text):
     try:
+        import smtplib
+
         sender = "srmaakku123@gmail.com"
-        password = "hnyxotjygdgmnrce"
+        password = os.getenv("EMAIL_PASS")
 
         message = f"Subject: {subject}\n\n{body_text}"
 
-        server = smtplib.SMTP("74.125.24.109", 587)  # Gmail SMTP IPv4
+        server = smtplib.SMTP("smtp.gmail.com", 587)
         server.starttls()
         server.login(sender, password)
-        server.sendmail(sender, to_email, message.encode("utf-8"))  # ✅ FIX
+        server.sendmail(sender, to_email, message.encode("utf-8"))
         server.quit()
 
         print("Mail sent successfully ✅")
@@ -182,7 +185,6 @@ def dashboard():
         return redirect("/")
 
     return render_template("index.html", show_profile=True)
-
 
 # ================== ADMIN LOGIN ==================
 @app.route("/admin-login", methods=["GET", "POST"])
